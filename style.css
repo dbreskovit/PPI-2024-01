@@ -1,5 +1,5 @@
 body {
-  font-family: sans-serif, Arial;  
+  font-family: sans-serif, Arial;
   font-size: 12px;
   font-weight: bold;
 }
@@ -14,20 +14,22 @@ body {
 }
 
 path {
-  fill-opacity: .1;
+  fill-opacity: 0.1;
   stroke-opacity: 1;
 }
 
 /* style.css */
 .tooltip {
   position: absolute;
+  top: 0;
   text-align: center;
   width: auto;
   height: auto;
-  padding: 5px;
-  font: 12px sans-serif;
-  background: lightsteelblue;
+  padding: 10px;
+  font: 20px sans-serif;
+  background: rgb(0, 0, 0);
   border: 0px;
   border-radius: 8px;
   pointer-events: none;
+  color: #fff;
 }
