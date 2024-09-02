@@ -107,6 +107,7 @@ var graph = {
   ],
 };
 
+
 var svg = d3.select("svg"),
   width = window.innerWidth,
   height = window.innerHeight,
@@ -123,7 +124,7 @@ var svg = d3.select("svg"),
   paths,
   groups,
   groupIds,
-  scaleFactor = 1.6,
+  scaleFactor = 1.5,
   polygon,
   centroid,
   node,
@@ -138,15 +139,13 @@ var svg = d3.select("svg"),
     .forceSimulation()
     .force(
       "link",
-      d3.forceLink()
-        .id(function (d) {
-          return d.id;
-        })
-   
+      d3.forceLink().id(function (d) {
+        return d.id;
+      })
     )
     .force("charge", d3.forceManyBody())
     .force("center", d3.forceCenter(width / 2, height / 2))
-    .force("collision", d3.forceCollide().radius(30)); // Ajuste a força de colisão
+    .force("collision", d3.forceCollide().radius(30));
 
 var select = d3
   .select("#curveSettings")
@@ -181,7 +180,9 @@ link = svg
     return Math.sqrt(d.value);
   });
 
-  var tooltip = d3.select("body").append("div")
+var tooltip = d3
+  .select("body")
+  .append("div")
   .attr("class", "tooltip")
   .style("opacity", 0);
 
@@ -193,7 +194,7 @@ node = svg
   .enter()
   .append("circle")
   .attr("r", function (d) {
-    return d.isRouter ? 10 : (d.repeater ? 10 : 5);
+    return d.isRouter ? 10 : d.repeater ? 10 : 5;
   })
   .attr("fill", function (d) {
     return color(d.group);
@@ -314,23 +315,27 @@ function ticked() {
       return d.y;
     })
     .on("mouseover", function (event, d) {
-      tooltip.transition()
-        .duration(200)
-        .style("opacity", .9);
-      
+      tooltip.transition().duration(200).style("opacity", 0.9);
+
       // Seleciona os elementos <coordinates>, <dbm> e <speed> dentro do nó e obtém seus textos
       var coordinates = d3.select(this).select("coordinates").text();
       var dbm = d3.select(this).select("dbm").text();
       var speed = d3.select(this).select("speed").text();
-      
-      tooltip.html("Coordenada: " + coordinates + "<br/>dBm: " + dbm + "<br/>Velocidade: " + speed)
-        .style("left", (event.pageX + 5) + "px")
-        .style("top", (event.pageY - 28) + "px");
+
+      tooltip
+        .html(
+          "Coordenada: " +
+            coordinates +
+            "<br/>dBm: " +
+            dbm +
+            "<br/>Velocidade: " +
+            speed
+        )
+        .style("left", event.pageX + 5 + "px")
+        .style("top", event.pageY - 28 + "px");
     })
     .on("mouseout", function (d) {
-      tooltip.transition()
-        .duration(500)
-        .style("opacity", 0);
+      tooltip.transition().duration(500).style("opacity", 0);
     });
 
   updateGroups();
@@ -376,6 +381,9 @@ function updateGroups() {
         scaleFactor +
         ")"
     );
+
+    
+
   });
 }
 
@@ -430,3 +438,56 @@ node.on("mouseover", function (event, d) {
     .style("left", event.pageX + 5 + "px")
     .style("top", event.pageY - 28 + "px");
 });
+
+function ticked() {
+  link
+    .attr("x1", function (d) {
+      return d.source.x;
+    })
+    .attr("y1", function (d) {
+      return d.source.y;
+    })
+    .attr("x2", function (d) {
+      return d.target.x;
+    })
+    .attr("y2", function (d) {
+      return d.target.y;
+    });
+
+  node
+    .attr("cx", function (d) {
+      return d.x;
+    })
+    .attr("cy", function (d) {
+      return d.y;
+    })
+    .on("mouseover", function (event, d) {
+      tooltip.transition()
+        .duration(200)
+        .style("opacity", .9);
+
+     
+      var coordinates = d3.select(this).select("coordinates").text();
+      var dbm = d3.select(this).select("dbm").text();
+      var speed = d3.select(this).select("speed").text();
+
+      tooltip.html("Coordenada: " + coordinates + "<br/>dBm: " + dbm + "<br/>Velocidade: " + speed)
+        .style("left", (event.pageX + 5) + "px")
+        .style("top", (event.pageY - 28) + "px");
+    })
+    .on("mouseout", function (d) {
+      tooltip.transition()
+        .duration(500)
+        .style("opacity", 0);
+    });
+
+  
+  node.each(function (d) {
+    if (d.isRouter) {
+      d.fx = window.innerWidth / 2; 
+      d.fy = window.innerHeight / 2;
+    }
+  });
+
+  updateGroups();
+}
