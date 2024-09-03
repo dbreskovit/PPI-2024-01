@@ -1,8 +1,24 @@
 body {
-  font-family: sans-serif, Arial;
-  font-size: 12px;
-  font-weight: bold;
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  margin: 0;
+  padding: 0;
 }
+
+header {
+  background-color: #333;
+  color: #fff;
+  padding: 1em;
+  text-align: center;
+}
+
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
 .links line {
   stroke: #999;
   stroke-opacity: 0.6;
@@ -18,13 +34,11 @@ path {
   stroke-opacity: 1;
 }
 
-/* style.css */
 .tooltip {
   position: absolute;
   top: 0;
   text-align: center;
-  width: auto;
-  height: auto;
+
   padding: 10px;
   font: 20px sans-serif;
   background: rgb(0, 0, 0);
@@ -32,4 +46,17 @@ path {
   border-radius: 8px;
   pointer-events: none;
   color: #fff;
+
+  margin-top: 130px;
+  margin-left: 20px;
+}
+
+.pedro p {
+  font-size: 14px;
+  margin: 6px;
+}
+
+.pedro h4 {
+  font-size: 20px;
+  margin: 10px;
 }
